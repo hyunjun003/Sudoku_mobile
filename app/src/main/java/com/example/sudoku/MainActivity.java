@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
         int selectCol = selectedB.col;
         CustomButton NumberCustom;//row
         CustomButton NumberCustom2;//col
-        CustomButton NumberCustomMe = buttons[selectRow][selectCol];;
+        CustomButton NumberCustomMe = buttons[selectRow][selectCol];
+        ;
         CustomButton NumberCustom3; //3x3
         for (int c = 0; c < 9; c++) {//row col 검사
             //row에 같은값 있는지 검사
@@ -192,19 +193,18 @@ public class MainActivity extends AppCompatActivity {
 //                setConflict(NumberCustomMe);
                 System.out.println("Row");
                 return 1;
-            }
-            else if (testNum == NumberCustom2.get() && c != selectRow) {//col 값을 검사함 ( 같은 숫자가 있는지 확인 )
+            } else if (testNum == NumberCustom2.get() && c != selectRow) {//col 값을 검사함 ( 같은 숫자가 있는지 확인 )
 //                setConflict(NumberCustomMe);
                 System.out.println("Col");
                 return 1;
             }
         }
-        int tmpRow = selectRow/3*3;
-        int tmpCol = selectCol/3*3;
-        for (int r =tmpRow; r<=tmpRow+2; r++){
-            for (int c=tmpCol; c<=tmpCol+2; c++){
-                NumberCustom3=buttons[r][c];
-                if (testNum == NumberCustom3.get() && r!=selectRow && c !=selectCol){
+        int tmpRow = selectRow / 3 * 3;
+        int tmpCol = selectCol / 3 * 3;
+        for (int r = tmpRow; r <= tmpRow + 2; r++) {
+            for (int c = tmpCol; c <= tmpCol + 2; c++) {
+                NumberCustom3 = buttons[r][c];
+                if (testNum == NumberCustom3.get() && r != selectRow && c != selectCol) {
 //                    setConflict(NumberCustomMe);
                     System.out.println("3x3");
                     return 1;
@@ -214,16 +214,13 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-    public void setColor(int status){
-        System.out.println(status);
-        if(status==1){
+    public void setColor(int status) {
+        if (status == 1) {
             setConflict();
-        }
-        else{
+        } else {
             unsetConflict();
         }
     }
-
 
     public void setConflict() {
         selectedB.setBackgroundColor(Color.RED);
@@ -233,3 +230,6 @@ public class MainActivity extends AppCompatActivity {
         selectedB.setBackgroundColor(Color.WHITE);
     }
 }
+
+//issue1
+// 내꺼 충돌시 나랑 충돌난 친구도 동시에 RED처리해줘야함

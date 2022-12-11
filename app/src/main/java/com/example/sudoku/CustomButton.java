@@ -16,40 +16,41 @@ public class CustomButton extends FrameLayout {
     int value;
     String C;
     TextView textView;
+
     public CustomButton(@NonNull Context context, int row, int col) {
         super(context);
         this.row = row;
         this.col = col;
         textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+        textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         textView.setTextColor(Color.BLUE);
         setBackgroundResource(R.drawable.button_selector);
         setClickable(true);
         addView(textView);
 
     }
+
     //make Board Start
     //빈칸 채우기
     public void set(int num) {
         value = num;
         textView.setText(num + "");
     }
+
     //빈칸 삽입
-    public void setNone(String C){
+    public void setNone(String C) {
         this.C = C;
         textView.setText("");
     }
     //make Board End
 
     //insert 숫자 넣는 부분
-    public void insertNum(int N){
+    public void insertNum(int N) {
         value = N;
         textView.setTextColor(Color.BLACK);
-        textView.setText(N+"");
+        textView.setText(N + "");
     }
     //insert 숫자 넣는 부분 End
-
-
 
 
     public int get() {
@@ -57,7 +58,7 @@ public class CustomButton extends FrameLayout {
         return value;
     }
 
-    void reset(){
+    void reset() {
         textView.setText("");
     }
 
