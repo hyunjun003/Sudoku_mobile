@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickEvent(View view, int a){
         selectedB.insertNum(a);
         numberPad.setVisibility(View.INVISIBLE);
+        conflictTest(a);
     }
 
     //gameBoard 생성
@@ -164,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
-
                 tableRow.addView(buttons[i][j]);
             }
             table.addView(tableRow);
@@ -172,10 +172,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setConflict(){
+    public void conflictTest(int testNum){
+        int selectRow = selectedB.row;
+        int selectCol = selectedB.col;
+
+
+        for(int c=0;c<9; c++){
+            //row에 같은값 있는지 검사
+            int exNum = board.get(selectRow, c);
+            System.out.println("c is "+c+"\nexNum is "+exNum);
+
+            if (testNum == exNum){
+                setConflict();
+
+            }
+            else{
+                unsetConflict();
+
+            }
+            //col에 같은값 있는지 검사
+//            int exNum2 = buttons[c][selectCol].get();
+//            if (testNum == exNum2){
+//                setConflict();
+//            }
+//            else{
+//                unsetConflict();
+//            }
+        }
+
+
+
+
+
+
+        //row col에 맞춰서 맞는 group 반환하는 함수 호출
+        //반환받은 group값을 통해서 검사
 
     }
-    public void unsetConflict(){
 
+    public void setConflict(){
+        Toast.makeText(this, "Conflict!", Toast.LENGTH_SHORT).show();
+    }
+    public void unsetConflict(){
+        Toast.makeText(this, "Ok!", Toast.LENGTH_SHORT).show();
     }
 }

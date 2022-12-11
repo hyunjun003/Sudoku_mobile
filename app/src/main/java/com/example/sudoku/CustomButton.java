@@ -49,8 +49,12 @@ public class CustomButton extends FrameLayout {
     }
     //insert 숫자 넣는 부분 End
 
-    public String get() {
-        return C;
+
+
+
+    public int get() {
+
+        return value;
     }
 
     void reset(){
