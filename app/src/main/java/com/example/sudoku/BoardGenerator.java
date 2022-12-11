@@ -89,11 +89,11 @@ public class BoardGenerator {
         }
 
     }
-
+    // board 전체 얻기
     public int[][] get() {
         return board;
     }
-
+    // board[row][col] 얻기
     public int get(int row, int col) {
         return board[row][col];
     }
