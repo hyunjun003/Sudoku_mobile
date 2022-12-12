@@ -2,6 +2,7 @@ package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
     TableLayout table, numberPad;
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialog;
     Button reset_button;
     boolean[][] boardLog = new boolean[9][9];
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
     public void insertNumPad() {
         numP1 = findViewById(R.id.numP1);
         numP1.setOnClickListener(new View.OnClickListener() {
@@ -180,11 +186,39 @@ public class MainActivity extends AppCompatActivity {
                             numberPad.setVisibility(View.VISIBLE);
                         }
                     });
+                    buttons[i][j].setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            selectedB = buttons[finalI][finalJ];
+                            memo(selectedB);
+                            return true;
+                        }
+                    });
                 }
                 tableRow.addView(buttons[i][j]);
             }
             table.addView(tableRow);
         }
+
+    }
+
+    public void memo(View view){
+
+        View memo = getLayoutInflater().inflate(R.layout.memolayout,null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setView(memo);
+        final AlertDialog alertDialog = builder.create();
+        Button cancelBtn = memo.findViewById(R.id.cancel);
+        alertDialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+
 
     }
 
