@@ -2,22 +2,13 @@ package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.shape.CutCornerTreatment;
-import com.google.android.material.tabs.TabLayout;
-
-import java.time.temporal.ChronoUnit;
 
 public class MainActivity extends AppCompatActivity {
     TableLayout table, numberPad;
@@ -27,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     Button numP1, numP2, numP3, numP4, numP5, numP6, numP7, numP8, numP9, cancel_button, delete_button;
     CustomButton selectedB;
     Dialog dialog;
+    Button reset_button;
+    boolean[][] boardLog = new boolean[9][9];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +27,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         table = (TableLayout) findViewById(R.id.tableLayout);
         numberPad = (TableLayout) findViewById(R.id.numberPad);
+        reset_button = findViewById(R.id.reset_button);
         makeBoard();
         insertNumPad();
+        reset_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetBoard();
+            }
+        });
     }
+    public void resetBoard(){
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if (boardLog[i][j]!=true)
+                {
+                    buttons[i][j].reset();
+                    unConflicts(buttons[i][j]);               // 색상 변경
+                }
 
+            }
+        }
+    }
     public void insertNumPad() {
         numP1 = findViewById(R.id.numP1);
         numP1.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 // 70% 채우기 시작
                 int randomInt = (int) (Math.random() * 10);
                 if (randomInt > 3) {
+                    boardLog[i][j]=true;
                     buttons[i][j].set(board.get(i, j));
                     buttons[i][j].setClickable(false);
                 } else {
@@ -182,40 +194,63 @@ public class MainActivity extends AppCompatActivity {
         int selectCol = selectedB.col;
         CustomButton NumberCustom;//row
         CustomButton NumberCustom2;//col
-        CustomButton NumberCustomMe = buttons[selectRow][selectCol];
-        ;
-        CustomButton NumberCustom3; //3x3
+//        CustomButton NumberCustomMe = buttons[selectRow][selectCol];
+//        CustomButton NumberCustom3 = null; //3x3
         for (int c = 0; c < 9; c++) {//row col 검사
-            //row에 같은값 있는지 검사
             NumberCustom = buttons[selectRow][c];
             NumberCustom2 = buttons[c][selectCol];
-            if (testNum == NumberCustom.get() && c != selectCol) {//row 값을 검사함 ( 같은 숫자가 있는지 확인 )
-//                setConflict(NumberCustomMe);
-                System.out.println("Row");
-                return 1;
-            } else if (testNum == NumberCustom2.get() && c != selectRow) {//col 값을 검사함 ( 같은 숫자가 있는지 확인 )
-//                setConflict(NumberCustomMe);
-                System.out.println("Col");
-                return 1;
+            if (testNum == NumberCustom.get() && c != selectCol) {//row 값을 검사 ( 같은 숫자가 있는지 확인 )
+                if (testNum == NumberCustom2.get() && c != selectRow) {//col 값을 검사 ( 같은 숫자가 있는지 확인 )
+                    int a = threeFinder(selectRow, selectCol, testNum, null);//row col 걸린상태에서 3.3도 검사함 ( 붉은색으로 만들기 위함 )
+//                    Conflicts(buttons[c][selectCol]);
+                    return 1+a;
+                } else {
+                    int a = threeFinder(selectRow, selectCol, testNum, null);
+//                    Conflicts(buttons[selectRow][c]);
+                    return 1+a;
+                }
+            }
+            else{
+//                unConflicts(buttons[selectRow][c]);
+            }
+
+            if (testNum == NumberCustom2.get() && c != selectRow) {//col 값을 검사 ( 같은 숫자가 있는지 확인 )
+                if (testNum == NumberCustom.get() && c != selectCol) { // row 값을 검사
+                    int a = threeFinder(selectRow, selectCol, testNum, null);
+//                    Conflicts(buttons[selectRow][c]);
+                    return 1+a;
+                } else {
+                    int a = threeFinder(selectRow, selectCol, testNum, null);
+//                    Conflicts(buttons[c][selectCol]);
+                    return 1+a;
+                }
+            }
+            else{
+//                unConflicts(buttons[c][selectCol]);
             }
         }
+        return 0;
+    }
+    //3x3 finder test
+    public int threeFinder(int selectRow, int selectCol, int testNum, CustomButton NumberCustom3){
         int tmpRow = selectRow / 3 * 3;
         int tmpCol = selectCol / 3 * 3;
         for (int r = tmpRow; r <= tmpRow + 2; r++) {
             for (int c = tmpCol; c <= tmpCol + 2; c++) {
                 NumberCustom3 = buttons[r][c];
-                if (testNum == NumberCustom3.get() && r != selectRow && c != selectCol) {
-//                    setConflict(NumberCustomMe);
-                    System.out.println("3x3");
+                if (testNum == NumberCustom3.get() && r+c != selectRow + selectCol) {
+//                    Conflicts(buttons[r][c]);
                     return 1;
                 }
+//                unConflicts(buttons[r][c]);
             }
         }
         return 0;
     }
 
     public void setColor(int status) {
-        if (status == 1) {
+        System.out.println("status "+status);
+        if (status >= 1) {
             setConflict();
         } else {
             unsetConflict();
@@ -225,11 +260,14 @@ public class MainActivity extends AppCompatActivity {
     public void setConflict() {
         selectedB.setBackgroundColor(Color.RED);
     }
-
     public void unsetConflict() {
         selectedB.setBackgroundColor(Color.WHITE);
     }
+//
+//    public void Conflicts(CustomButton customButton){
+//        customButton.setBackgroundColor(Color.RED);
+//    }
+    public void unConflicts(CustomButton customButton){
+        customButton.setBackgroundColor(Color.WHITE);
+    }
 }
-
-//issue1
-// 내꺼 충돌시 나랑 충돌난 친구도 동시에 RED처리해줘야함

@@ -52,6 +52,12 @@ public class CustomButton extends FrameLayout {
     }
     //insert 숫자 넣는 부분 End
 
+    public void checkedPad(){//삽입한 pad
+        int checked = 1;
+    }
+    public void nonePad(){
+        int none = 0;
+    }
 
     public int get() {
 
